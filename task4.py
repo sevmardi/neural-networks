@@ -26,7 +26,7 @@ mis_test_all = np.zeros((runs, iters))
 # number of misclassfied digits for each run
 errors = np.zeros(10)
 
-
+#algorthm.. later to comment
 for run in range(runs):
     weights = np.random.random((10, 257))
     mis_train = np.zeros(iters)
@@ -44,8 +44,7 @@ for run in range(runs):
                 sum_temp[k] = np.sum(np.multiply(weights[k], train_in[j]))
             if train_out[j] != np.argmax(sum_temp):
                 # increase the weights of target digit
-                weights[int(train_out[j])
-                        ] += np.multiply(train_in[j], learning_rate)
+                weights[int(train_out[j])] += np.multiply(train_in[j], learning_rate)
                 # decrease the weights of the digit being misclassfied as
                 weights[np.argmax(sum_temp)
                         ] -= np.multiply(train_in[j], learning_rate)
