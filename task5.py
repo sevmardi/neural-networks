@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import sys
 import os
 import math
@@ -26,6 +25,7 @@ class Network:
         self.output_nodes = output_nodes
         self.total_nodes = input_nodes + output_nodes
         self.learning_rate = learning_rate
+        self.counter = 0
 
         # arrays
         self.values = np.zeros(self.total_nodes)
@@ -48,23 +48,46 @@ class Network:
             W_i -= self.thresholds[i]
         self.values[i] = 1 / (1 + math.exp(-W_i))
 
-    
+    def __sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+
+    def __sigmoid_derivative(self, x):
+        return x * (1 - x)
+
     def xor_net(self, x1, x2, weights):
         pass
 
     def mse(self, weights):
-    	pass
+        if weights == 0:
+            self.network.values[0] = 1
+            self.network.values[1] = 1
+            self.network.expectedValues[4] = 0
+        elif weights == 1:
+            self.network.values[0] = 0
+            self.network.values[1] = 1
+            self.network.expectedValues[4] = 1
+        elif weights == 2:
+            self.network.values[0] = 1
+            self.network.values[1] = 0
+            self.network.expectedValues[4] = 1
+        else:
+            self.network.values[0] = 0
+            self.network.values[1] = 0
+            self.network.expectedValues[4] = 0
 
     def grdmse(self, weights):
-    	pass
+        self.mse(self.counter % 4)
+        self.counter += 1
+        
 
     def gda(self):
-    	pass
-
+        pass
 
 
 def main():
-    pass
+    training_input = [[0, 0], [0, 1], [1, 0], [1, 1]]
+    training_output = np.array([[0, 1, 1, 0]]).T
+
 
 if __name__ == '__main__':
     main()

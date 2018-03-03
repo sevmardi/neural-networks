@@ -1,10 +1,11 @@
-import numpy as np
-from collections import OrderedDict
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.metrics import confusion_matrix
-import matplotlib.pyplot as plt
 import itertools
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+
+from collections import OrderedDict
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics.pairwise import pairwise_distances
 
 train_in = np.genfromtxt("data/train_in.csv", delimiter=",")
 test_in = np.genfromtxt("data/test_in.csv", delimiter=",")
@@ -29,77 +30,74 @@ test_out = np.genfromtxt("data/test_out.csv")
 
 # create ordered dictionary with (list_#digit: vectors)
 d = OrderedDict(("list_" + str(i), []) for i in range(10))
+for i in range(10):
+    for j in range(len(train_out)):
+        if train_out[j] == i:
+            d["list_" + str(i)].append(train_in[j, :])
+
+# means/centers as (10,256)-array
+centers = np.zeros((10, 256))
+# centers = train.groupby(train_out[0]).mean()
 
 for i in range(10):
-	for j in range(len(train_out)):
-		if train_out[j] == i:
-			d["list_" + str(i)].append(train_in[j, :])
+    centers[i, :] = np.mean(d["list_" + str(i)], axis=0)
 
-# means/centers as (10,256)-array 
-centers = np.zeros((10, 256)) 
-# centers = train.groupby(train_out[0]).mean() 
-
-for i in range(10):
-	centers[i, :] = np.mean(d["list_" + str(i)], axis=0)
-
-for i in range(10):
-	print("number of " + str(i) + "s: " + str(len(d["list_" + str(i)])))
+# for i in range(10):
+#     print("number of " + str(i) + "s: " + str(len(d["list_" + str(i)])))
 
 # calculate radii
 radii = np.zeros((10, 1))
 for i in range(10):
-	radius = 0
-	for point in d["list_" + str(i)]:
-		new_radius = np.linalg.norm(point-centers[i,:])
-		if new_radius >= radius:
-			radius = new_radius
-	radii[i] = radius
+    radius = 0
+    for point in d["list_" + str(i)]:
+        new_radius = np.linalg.norm(point - centers[i, :])
+        if new_radius >= radius:
+            radius = new_radius
+    radii[i] = radius
 
 
-#create distance matrix between centers
-centers_dist = np.zeros((10,10))
-
+# create distance matrix between centers
+centers_dist = np.zeros((10, 10))
 for i in range(10):
-	for j in range(10):
-		centers_dist[i,j] = np.linalg.norm(centers[i, :] - centers[j, :])
-
+    for j in range(10):
+        centers_dist[i, j] = np.linalg.norm(centers[i, :] - centers[j, :])
 # print("Distances between each centers")
 # print(centers_dist)
 
 train_pre = np.empty(len(train_out))
 test_pre = np.empty(len(test_out))
 
+
 for i in range(len(train_in)):
-	current_dist = pairwise_distances(centers, train_in[i], metric='cosine')
-	train_pre[i] = np.argmin(current_dist)
+    current_dist = pairwise_distances(centers, train_in[i], metric='euclidean')
+    train_pre[i] = np.argmin(current_dist)
+
 
 confusion_matrix_test = confusion_matrix(test_out, test_pre)
 correct_rate_train = np.zeros(10)
-
-
-
 conf_matrix_train = confusion_matrix(train_out, train_pre)
 
 
 # # calculate the correctly classified digits
-correct_rate_train = np.zeros(10)
-for i in range(10):
-    correct_rate_train[i] = float(
-        conf_matrix_train[i, i]) / np.sum(conf_matrix_train[i, :])
-print("Correct rate of training")
-print(correct_rate_train)
+# correct_rate_train = np.zeros(10)
+# for i in range(10):
+#     correct_rate_train[i] = float(
+#         conf_matrix_train[i, i]) / np.sum(conf_matrix_train[i, :])
+# print("Correct rate of training")
+# print(correct_rate_train)
+
 
 # create confusion matrix for test data
-for i in range(len(test_out)):
-    current_dist = pairwise_distances(centers, test_in[i], metric='cosine')
-    test_pre[i] = np.argmin(current_dist)
+# for i in range(len(test_out)):
+#     current_dist = pairwise_distances(centers, test_in[i], metric='cosine')
+#     test_pre[i] = np.argmin(current_dist)
 
-conf_matrix_test = confusion_matrix(test_out, test_pre)
+# conf_matrix_test = confusion_matrix(test_out, test_pre)
 
-correct_rate_test = np.zeros(10)
-for i in range(10):
-    correct_rate_test[i] = float(
-        conf_matrix_test[i, i]) / np.sum(conf_matrix_test[i, :])
-print("correct rate on testing data")
+# correct_rate_test = np.zeros(10)
+# for i in range(10):
+#     correct_rate_test[i] = float(
+#         conf_matrix_test[i, i]) / np.sum(conf_matrix_test[i, :])
+# print("correct rate on testing data")
 
 # print(correct_rate_test)

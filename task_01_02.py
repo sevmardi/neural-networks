@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
-import sklearn.metrics.pairwise
+from scipy.metrics import confusion_matrix
 
 
 train_in = pd.read_csv('data/train_in.csv', sep=',', header=None)
@@ -24,12 +24,13 @@ train.columns = range(0, 257)
 test = pd.concat([test_out, test_in], axis=1)
 test.columns = range(0, 257)
 
-# Task1
+##########
+# Task 1 #
+##########
 ts1 = train.groupby(train_out[0])
 
 # Calculate the centroid of the 10 classes.
 centroids = train.groupby(train_out[0]).mean()
-
 radius = [[]] * 10
 for i in range(0, 10):
     squared = (train_in[train_out[0] == i] - centroids.iloc[i, :])**2
@@ -38,8 +39,13 @@ for i in range(0, 10):
 dist_cen = pdist(centroids, 'euclidean')
 dis_mat = squareform(dist_cen)
 
-# print(dis_mat)
+print(dist_cen)
 
+##########
+# Task 2 #
+#Implement and evaluate the simplest classifier
+##########
+##########
 out_label = []
 for i in range(0, 1707):
     squared = (train_in.loc[i, :] - centroids)**2
@@ -53,4 +59,4 @@ for i in range(0, 1000):
     dist = np.sum(squared, axis=1) ** (0.5)
     out_label_test.append(np.argmin(dist))
 
-print(out_label_test)
+# print(out_label_test)
