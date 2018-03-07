@@ -5,6 +5,7 @@ import pandas as pd
 
 from collections import OrderedDict
 from sklearn.metrics import confusion_matrix
+from scipy.spatial import distance
 from sklearn.metrics.pairwise import pairwise_distances
 
 train_in = np.genfromtxt("data/train_in.csv", delimiter=",")
@@ -67,15 +68,20 @@ for i in range(10):
 train_pre = np.empty(len(train_out))
 test_pre = np.empty(len(test_out))
 
-
+train_classified = []
 for i in range(len(train_in)):
-    current_dist = pairwise_distances(centers, train_in[i], metric='euclidean')
-    train_pre[i] = np.argmin(current_dist)
+    distances = []
+    for c in range(len(centers)):
+        distances.append(distance.euclidean(centers[c], train_in[i]))
+    train_classified.append(distances.index(min(distances)))
+    #train_pre[i] = np.argmin(current_dist)
 
+print(confusion_matrix(train_classified, train_out))
+(train_classified == train_out).sum() / len(train_out)
 
-confusion_matrix_test = confusion_matrix(test_out, test_pre)
+#confusion_matrix_test = confusion_matrix(test_out, train_classified)
 correct_rate_train = np.zeros(10)
-conf_matrix_train = confusion_matrix(train_out, train_pre)
+conf_matrix_train = confusion_matrix(train_out, train_classified)
 
 
 # # calculate the correctly classified digits
