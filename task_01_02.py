@@ -1,9 +1,11 @@
+#DONT RUN THIS, NOT WORKING PROBERLY! 
+#IT'S JUST experimental
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial.distance import pdist
 from scipy.spatial.distance import squareform
-from scipy.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix
 
 
 train_in = pd.read_csv('data/train_in.csv', sep=',', header=None)
@@ -11,10 +13,10 @@ train_out = pd.read_csv('data/train_out.csv', sep=',', header=None)
 test_in = pd.read_csv('data/test_in.csv', sep=',', header=None)
 test_out = pd.read_csv('data/test_out.csv', sep=',', header=None)
 
-train_in.head()
-train_out.head()
-test_in.head()
-test_out.head()
+# train_in.head()
+# train_out.head()
+# test_in.head()
+# test_out.head()
 
 
 # Prepare the data
@@ -46,17 +48,17 @@ print(dist_cen)
 #Implement and evaluate the simplest classifier
 ##########
 ##########
-out_label = []
-for i in range(0, 1707):
-    squared = (train_in.loc[i, :] - centroids)**2
-    dist = np.sum(squared, axis=1) ** (0.5)
-    out_label.append(np.argmin(dist))
+# out_label = []
+# for i in range(0, 1707):
+#     squared = (train_in.loc[i, :] - centroids)**2
+#     dist = np.sum(squared, axis=1) ** (0.5)
+#     out_label.append(np.argmin(dist))
 
-# print(out_label)
-out_label_test = []
-for i in range(0, 1000):
-    squared = (train_in.loc[i, :] - centroids)**2
-    dist = np.sum(squared, axis=1) ** (0.5)
-    out_label_test.append(np.argmin(dist))
+# # print(out_label)
+# out_label_test = []
+# for i in range(0, 1000):
+#     squared = (train_in.loc[i, :] - centroids)**2
+#     dist = np.sum(squared, axis=1) ** (0.5)
+#     out_label_test.append(np.argmin(dist))
 
 # print(out_label_test)

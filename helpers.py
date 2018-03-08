@@ -36,3 +36,10 @@ def number_of():
     for i in range(10):
         print("number of " + str(i) + "s: " +
               str(len(oredered_list["list_" + str(i)])))
+
+
+def loader():
+    train_in = np.genfromtxt("data/train_in.csv", delimiter=",")
+    test_in = np.genfromtxt("data/test_in.csv", delimiter=",")
+
+    
