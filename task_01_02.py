@@ -31,7 +31,7 @@ test.columns = range(0, 257)
 ##########
 ts1 = train.groupby(train_out[0])
 
-# Calculate the centroid of the 10 classes.
+# Calculate the center of the 10 classes.
 centroids = train.groupby(train_out[0]).mean()
 radius = [[]] * 10
 for i in range(0, 10):
