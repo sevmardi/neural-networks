@@ -122,7 +122,7 @@ def bayes_classification(feature, correct, hist5, hist7):
 
 
 def main():
-    #draw_digit(420)
+    draw_digit(420)
     lh_training, correct_training = extract_feature(train_in, train_out)
     hist5, hist7 = generate_histograms_from_training(lh_training, correct_training)
     draw_histogram(hist5, hist7)
