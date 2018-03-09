@@ -114,7 +114,7 @@ def bayes_classification(feature, correct, hist5, hist7):
     a = np.array(list(correct.values()))
     b = np.array(list(classification.values()))
 
-    print(confusion_matrix(list(correct.values()), list(classification.values())))
+    print(confusion_matrix(a, b))
     acc = (a == b).sum() / len(a)
     print(acc)
 
