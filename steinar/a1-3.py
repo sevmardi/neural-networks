@@ -84,8 +84,7 @@ def draw_histogram(hist5, hist7):
     plt.show()
 
 def bayes_classification(feature, correct, hist5, hist7):
-    values = [feature[key] for key in feature]
-    mean = float(format( statistics.mean(values), '.2f' ))
+    mean = get_mean(feature)
     P_C5 = sum(hist5.values()) / (sum(hist7.values()) + sum(hist5.values()))
     P_C7 = sum(hist7.values()) / (sum(hist7.values()) + sum(hist5.values()))
 
