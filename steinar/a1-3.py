@@ -30,6 +30,8 @@ def draw_digit(itemid):
 
 
 def extract_feature(data_in, data_out):
+    #we chose to look at the lower halves of 5s and 7s, and measure the mean grey values (intensity)
+    #we observed that the curve in lh of 5s should give a higher mean intensity than the straight stem of a 7.
     lh_intensity_all = []
     lh_intensity = {}
 
@@ -55,7 +57,7 @@ def get_mean(feature):
     return(mean)
 
 def generate_histograms_from_training(lh_intensity, correct_57):
-#generate histograms of lower half mean intensities of 5s and 7s from training data
+    #generate histograms of lower half mean intensities of 5s and 7s from training data
     hist5 = {}
     hist7 = {}
 
@@ -85,6 +87,7 @@ def draw_histogram(hist5, hist7):
 
 def bayes_classification(feature, correct, hist5, hist7):
     mean = get_mean(feature)
+    #calculate priors
     P_C5 = sum(hist5.values()) / (sum(hist7.values()) + sum(hist5.values()))
     P_C7 = sum(hist7.values()) / (sum(hist7.values()) + sum(hist5.values()))
 
@@ -93,16 +96,19 @@ def bayes_classification(feature, correct, hist5, hist7):
     for key, value in feature.items():
         #in case of uncertainty, if the value could either represent a 5 or a 7, apply bayes theorem
         if(value in hist5.keys() and value in hist7.keys() ):
+            #class-conditionals
             P_X_C5 = hist5[value] / (hist7[value] + hist5[value])
             P_X_C7 = hist7[value] / (hist7[value] + hist5[value])
+            #scaling factor
             P_X = P_X_C5 * P_C5 + P_X_C7 * P_C7
+            #posteriors
             P_C5_X = (P_X_C5 * P_C5) / P_X
             P_C7_X = (P_X_C7 * P_C7) / P_X
             if(np.random.rand() < P_C7_X):
                 classification[key] = 7
             else:
                 classification[key] = 5
-        #fallback to classifying by mean.
+        #fallback to classifying, using mean as decision boundary.
         elif value < mean:
             classification[key] = 7
         else:
@@ -122,6 +128,7 @@ def bayes_classification(feature, correct, hist5, hist7):
 
 def main():
     draw_digit(420)
+    draw_digit(3)
     lh_training, correct_training = extract_feature(train_in, train_out)
     hist5, hist7 = generate_histograms_from_training(lh_training, correct_training)
     draw_histogram(hist5, hist7)
@@ -129,6 +136,7 @@ def main():
     lh_testing, correct_testing = extract_feature(test_in, test_out)
 
     bayes_classification(lh_training, correct_training, hist5, hist7)
+    #try classifying the test data, using the feature histograms from our training data
     bayes_classification(lh_testing, correct_testing, hist5, hist7)
 
 
