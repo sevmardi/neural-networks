@@ -29,30 +29,30 @@ def draw_digit(itemid):
 
 
 
-def extract_feature_from_training():
+def extract_feature(data_in, data_out):
     lh_intensity_all = []
     lh_intensity = {}
 
     correct_57 = {}
     subimage = []
 
-    for i in range(len(train_in)):
-        image = train_in[i]
+    for i in range(len(data_in)):
+        image = data_in[i]
         image.shape = (16,16)
         subimage.append(image[8:16,0:16])
-        if train_out[i] == 5 or train_out[i] == 7:
+        if data_out[i] == 5 or data_out[i] == 7:
             lh_intensity[i] = float(format(subimage[i].mean(), '.2f'))
 
     for key, value in lh_intensity.items():
-        correct_57[key] = int(train_out[key])
+        correct_57[key] = int(data_out[key])
 
     return(lh_intensity, correct_57)
 
 
-def get_mean():
-    values_57 = [lh_intensity[key] for key in lh_intensity]
-    mean_57 = float(format( statistics.mean(values_57), '.2f' ))
-    return(mean_57)
+def get_mean(feature):
+    values = [feature[key] for key in feature]
+    mean = float(format( statistics.mean(values), '.2f' ))
+    return(mean)
 
 def generate_histograms_from_training(lh_intensity, correct_57):
 #generate histograms of lower half mean intensities of 5s and 7s from training data
@@ -83,16 +83,15 @@ def draw_histogram(hist5, hist7):
     #plt.savefig('report/figures/plots/57hist.png')
     plt.show()
 
-def bayes_training(lh_intensity, hist5, hist7):
-    values_57 = [lh_intensity[key] for key in lh_intensity]
-    mean_57 = float(format( statistics.mean(values_57), '.2f' ))
+def bayes_classification(feature, correct, hist5, hist7):
+    values = [feature[key] for key in feature]
+    mean = float(format( statistics.mean(values), '.2f' ))
     P_C5 = sum(hist5.values()) / (sum(hist7.values()) + sum(hist5.values()))
     P_C7 = sum(hist7.values()) / (sum(hist7.values()) + sum(hist5.values()))
-    correct_57 = {}
-    classify_57 = {}
 
-    for key, value in lh_intensity.items():
-        correct_57[key] = int(train_out[key])
+    classification = {}
+
+    for key, value in feature.items():
         #in case of uncertainty, if the value could either represent a 5 or a 7, apply bayes theorem
         if(value in hist5.keys() and value in hist7.keys() ):
             P_X_C5 = hist5[value] / (hist7[value] + hist5[value])
@@ -101,28 +100,37 @@ def bayes_training(lh_intensity, hist5, hist7):
             P_C5_X = (P_X_C5 * P_C5) / P_X
             P_C7_X = (P_X_C7 * P_C7) / P_X
             if(np.random.rand() < P_C7_X):
-                classify_57[key] = 7
+                classification[key] = 7
             else:
-                classify_57[key] = 5
+                classification[key] = 5
         #fallback to classifying by mean.
-        elif value < mean_57:
-            classify_57[key] = 7
+        elif value < mean:
+            classification[key] = 7
         else:
-            classify_57[key] = 5
+            classification[key] = 5
 
-    a = np.array(list(correct_57.values()))
-    b = np.array(list(classify_57.values()))
+    print(correct)
+    print(classification)
 
-    print(confusion_matrix(list(correct_57.values()), list(classify_57.values())))
+    a = np.array(list(correct.values()))
+    b = np.array(list(classification.values()))
+
+    print(confusion_matrix(list(correct.values()), list(classification.values())))
     acc = (a == b).sum() / len(a)
     print(acc)
 
+
+
 def main():
-    #plot_digit(420)
-    lh_intensity, correct_57 = extract_feature_from_training()
-    hist5, hist7 = generate_histograms_from_training(lh_intensity, correct_57)
+    #draw_digit(420)
+    lh_training, correct_training = extract_feature(train_in, train_out)
+    hist5, hist7 = generate_histograms_from_training(lh_training, correct_training)
     draw_histogram(hist5, hist7)
-    bayes_training(lh_intensity, hist5, hist7)
+
+    lh_testing, correct_testing = extract_feature(test_in, test_out)
+
+    bayes_classification(lh_training, correct_training, hist5, hist7)
+    bayes_classification(lh_testing, correct_testing, hist5, hist7)
 
 
 if __name__ == '__main__':
