@@ -77,17 +77,17 @@ print("The avg accuracy is " + str(1 - np.mean(errors)))
 print(np.mean(mis_train_all, axis=0), np.std(mis_train_all, axis=1))
 print(np.mean(mis_test_all, axis=0), np.std(mis_test_all, axis=0))
 
-# iter_x = np.linspace(0, iters, iters)
-# plt.figure()
-# axes = plt.gca()
-# axes.set_ylim([0, 0.25])
-# plt.errorbar(iter_x, np.mean(mis_train_all, axis=0), yerr=np.std(
-#     mis_train_all, axis=0), label="training mistake error")
-# plt.errorbar(iter_x, np.mean(mis_test_all, axis=0), yerr=np.std(
-#     mis_test_all, axis=0), label="test mistake rate")
+iter_x = np.linspace(0, iters, iters)
+plt.figure()
+axes = plt.gca()
+axes.set_ylim([0, 0.25])
+plt.errorbar(iter_x, np.mean(mis_train_all, axis=0), yerr=np.std(
+    mis_train_all, axis=0), label="training mistake error")
+plt.errorbar(iter_x, np.mean(mis_test_all, axis=0), yerr=np.std(
+    mis_test_all, axis=0), label="test mistake rate")
 
-# plt.legend(loc=0)
-# filepathname = 'plots/task4.png'
-# plt.savefig(filepathname)
-# print('Done!' + ' Check this folder => ' + filepathname)
+plt.legend(loc=0)
+filepathname = 'plots/task4.png'
+plt.savefig(filepathname)
+print('Done!' + ' Check this folder => ' + filepathname)
 # plt.show()

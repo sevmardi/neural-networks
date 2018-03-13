@@ -71,24 +71,24 @@ for i in range(10):
 
 #TASK 2 
 
-# train_classified = []
-# for i in range(len(train_in)):
-#     distances = []
-#     for j in range(len(centers)):
-#         distances.append(distance.euclidean(centers[j], train_in[i]))
-#     train_classified.append(distances.index(min(distances)))
+train_classified = []
+for i in range(len(train_in)):
+    distances = []
+    for j in range(len(centers)):
+        distances.append(distance.euclidean(centers[j], train_in[i]))
+    train_classified.append(distances.index(min(distances)))
 
-# # create confusion matrix for training data
-# conf_matrix_train = confusion_matrix(train_out, train_classified)
+# create confusion matrix for training data
+conf_matrix_train = confusion_matrix(train_out, train_classified)
 
 
-# #calcute the correctly classified digits
-# correct_rate_train = np.zeros(10)
-# for i in range(10):
-#     correct_rate_train[i] = float(conf_matrix_train[i,i])/np.sum(conf_matrix_train[i,:])
+#calcute the correctly classified digits
+correct_rate_train = np.zeros(10)
+for i in range(10):
+    correct_rate_train[i] = float(conf_matrix_train[i,i])/np.sum(conf_matrix_train[i,:])
 
-# print("correct rate of training data")
-# print(correct_rate_train)
+print("correct rate of training data")
+print(correct_rate_train)
 
 
 test_classified = []
@@ -159,9 +159,15 @@ np.set_printoptions(precision=2)
 
 #train confusion matrix
 plt.figure()
-plot_confusion_matrix(conf_matrix_test, classes=class_name, title = 'Confusion matix training set')
-# plt.savefig("train_euclidean.png")
-plt.show()
+plot_confusion_matrix(conf_matrix_train, classes=class_name, title = 'Confusion matix training set')
+plt.savefig("train_euclidean.png")
+# plt.show()
+
+
+plt.figure()
+plot_confusion_matrix(conf_matrix_test, classes=class_name, title='Confusion matrix test set')
+plt.savefig("test_euclidean.png")
+
 
 
 
