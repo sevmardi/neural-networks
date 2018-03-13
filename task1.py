@@ -28,7 +28,10 @@ centers = np.zeros((10,256))
 for i in range(10):
 	centers[i, :] = np.mean(d["list_" + str(i)], axis=0)
 
+# for i in range(10):
+# 	print("Number of "  + str(i) + "s: " + str(len(d["list_" + str(i)])))
 
+#calculate the radius
 radii = np.zeros((10,1))
 for i in range(10):
 	radius = 0
@@ -39,14 +42,22 @@ for i in range(10):
 	radii[i] = radius
 
 
+# print (np.around(radii, decimals = 2))
+
 distance_matrix = np.zeros((10,10))
 
 for i in range(10):
 	for j in range(10):
-		distance_matrix[i, j] = np.around((np.linalg.norm(centers[i, :])), decimals=2)
+		
+		print ("Distance (" + str(i) + ", " + str(j) + ") = " + str(np.linalg.norm(centers[i,:]-centers[j,:])))
+		# distance_matrix[i, j] = np.around((np.linalg.norm(centers[i, :])), decimals=2)
 
-for i in range(10):
-	print(np.around(np.mean(distance_matrix[i,:]), decimals=2))
+# for i in range(10):
+# 	print(np.around(np.mean(distance_matrix[i,:]), decimals=2))
 
 
-
+# for i in range(10):
+# 	print("\\textbf{" + str(i)+ "}&")
+# for i in range(10):
+# 	print ("\\textbf{" + str(i)+ "}&" + '&'.join(str(p) for p in list(distance_matrix[i,:])) + "\\\\")
+# 	print ("\\hline")

@@ -6,6 +6,9 @@ import pandas as pd
 from collections import OrderedDict
 from scipy.spatial import distance
 from sklearn.metrics import confusion_matrix
+from scipy.spatial.distance import pdist
+from scipy.spatial.distance import cdist
+from sklearn.metrics.pairwise import pairwise_distances
 
 train_in = np.genfromtxt("data/train_in.csv", delimiter=",")
 test_in = np.genfromtxt("data/test_in.csv", delimiter=",")
@@ -65,51 +68,56 @@ for i in range(10):
 # print("Distances between each centers")
 # print(centers_dist)
 
-# train_pre = np.empty(len(train_out))
-# test_pre = np.empty(len(test_out))
 
-train_classified = []
-for i in range(len(train_in)):
-    distances = []
-    for c in range(len(centers)):
-        distances.append(distance.euclidean(centers[c], train_in[i]))
-    train_classified.append(distances.index(min(distances)))
+#TASK 2 
 
-# print(confusion_matrix(train_classified, train_out))
-# (train_classified == train_out).sum() / len(train_out)
+# train_classified = []
+# for i in range(len(train_in)):
+#     distances = []
+#     for j in range(len(centers)):
+#         distances.append(distance.euclidean(centers[j], train_in[i]))
+#     train_classified.append(distances.index(min(distances)))
 
+# # create confusion matrix for training data
 # conf_matrix_train = confusion_matrix(train_out, train_classified)
-conf_matrix_train = confusion_matrix(train_classified, train_out )
 
-#calcute the correctly classified digits
-correct_rate_train = np.zeros(10)
-for i in range(10):
-    correct_rate_train[i] = float(
-        conf_matrix_train[i, i]) / np.sum(conf_matrix_train[i, :])
 
-# confusion_matrix_test = confusion_matrix(test_out, train_classified)
-print("correct rate of training data")
-print(correct_rate_train)
+# #calcute the correctly classified digits
+# correct_rate_train = np.zeros(10)
+# for i in range(10):
+#     correct_rate_train[i] = float(conf_matrix_train[i,i])/np.sum(conf_matrix_train[i,:])
 
+# print("correct rate of training data")
+# print(correct_rate_train)
+
+
+test_classified = []
 
 # create confusion matrix for test data
-test_classified = []
-for i in range(len(test_in)):
+for i in range(len(test_out)):
     distances = []
-    for c in range(len(centers)):
-        distances.append(distance.euclidean(centers[c], test_in[i]))
+    for j in range(len(centers)):
+        distances.append(distance.euclidean(centers[j], test_in[i]))
     test_classified.append(distances.index(min(distances)))
 
 
-conf_matrix_test = confusion_matrix(test_classified, test_out)
+conf_matrix_test = confusion_matrix(test_out, test_classified)
 
 correct_rate_test = np.zeros(10)
 for i in range(10):
-    correct_rate_test[i] = float(
-        conf_matrix_test[i, i]) / np.sum(conf_matrix_test[i, :])
-print("correct rate on testing data")
+    correct_rate_test[i] = float(conf_matrix_test[i,i])/np.sum(conf_matrix_test[i,:])
 
+print("correct rate on testing data")
 print(correct_rate_test)
+
+
+
+
+
+
+
+
+
 
 
 def plot_confusion_matrix(cm, classes,
@@ -151,7 +159,9 @@ np.set_printoptions(precision=2)
 
 #train confusion matrix
 plt.figure()
-plot_confusion_matrix(conf_matrix_train, classes=class_name, title = 'Confusion matix training set')
-plt.savefig("train_euclidean.png")
+plot_confusion_matrix(conf_matrix_test, classes=class_name, title = 'Confusion matix training set')
+# plt.savefig("train_euclidean.png")
+plt.show()
+
 
 

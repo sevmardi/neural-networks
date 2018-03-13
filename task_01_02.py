@@ -41,24 +41,24 @@ for i in range(0, 10):
 dist_cen = pdist(centroids, 'euclidean')
 dis_mat = squareform(dist_cen)
 
-print(dist_cen)
+# print(dist_cen)
 
 ##########
 # Task 2 #
 #Implement and evaluate the simplest classifier
 ##########
 ##########
-# out_label = []
-# for i in range(0, 1707):
-#     squared = (train_in.loc[i, :] - centroids)**2
-#     dist = np.sum(squared, axis=1) ** (0.5)
-#     out_label.append(np.argmin(dist))
+out_label_tra = []
+for i in range(0, 1707):
+    squared = (train_in.loc[i, :] - centroids)**2
+    dist = np.sum(squared, axis=1) ** (0.5)
+    out_label_tra.append(np.argmin(dist))
 
-# # print(out_label)
-# out_label_test = []
-# for i in range(0, 1000):
-#     squared = (train_in.loc[i, :] - centroids)**2
-#     dist = np.sum(squared, axis=1) ** (0.5)
-#     out_label_test.append(np.argmin(dist))
+print(out_label_tra)
+out_label_test = []
+for i in range(0, 1000):
+    squared = (train_in.loc[i, :] - centroids)**2
+    dist = np.sum(squared, axis=1) ** (0.5)
+    out_label_test.append(np.argmin(dist))
 
 # print(out_label_test)

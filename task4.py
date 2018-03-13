@@ -16,7 +16,6 @@ test_in = np.insert(test_in, 256, 1, axis=1)
 
 sum_temp = np.zeros(10)
 
-
 iters = 40
 runs = 10
 
