@@ -11,27 +11,34 @@ MAX_ITERATIONS = 130000
 
 # setting this too low makes everything change very slowly, but too high
 # makes it jump at each and every example and oscillate. I found .5 to be good
-LEARNING_RATE = .2
+LEARNING_RATE = 0.01
 
+EPSILON = 10**-5
 
 class Network:
 
     def xor_net(self, x1, x2, weights):
         """
-        Simulate a newwork with the below parameters    
+        Simulate a newwork with the below parameters
         """
-        self.input_nodes = self.__finding_value(x1, x2, weights[0:3])
-        self.hidden_nodes = self.__finding_value(x1, x2, weights[3:6])
-        self.output_nodes = self.__finding_value(x1, x2, weights)
 
-        return self.output_nodes
+        hidden1 = self.__sigmoid(np.sum([x1, x2] * weights[0:2]) + weights[2])
+        hidden2 = self.__sigmoid(np.sum([x1, x2] * weights[3:5]) + weights[5])
+
+        output = self.__sigmoid(np.sum([hidden1, hidden2] * weights[6:7]) + weights[8])
+
+        #self.input_nodes = self.__finding_value(x1, x2, weights[])
+        #self.hidden_nodes = self.__finding_value(x1, x2, weights[])
+        #self.output_nodes = self.__finding_value(x1, x2, weights[])
+
+        return output
 
     def mse(self, weights):
         """ Calculate mean sequared error
 
         Parameters
         ------
-        Weights: Node weights  
+        Weights: Node weights
 
 
         Return
@@ -50,59 +57,63 @@ class Network:
         return sum_of_errors
 
     def grdmse(self, weights):
-        """  Gradient of mes(weights) 
+        """  Gradient of mes(weights)
 
-        Parameters 
+        Parameters
         ----------
-        Weights: Node weights  
+        Weights: Node weights
 
         Return
         ------
-        
+
         """
         value = np.zeros(9)
 
-        x_matrix = np.array([[0, 0, 1, 1], [0, 1, 0, 1]])
-        xor_vec = np.array([0, 1, 1, 0])
-        partial_dev = 10**-3
+
+
         for i in range(0, 9):
             W_i = copy.copy(weights)
-            W_i[i] += partial_dev
-            value[i] = ((self.mse(W_i) - self.mse(weights)) / partial_dev)
+            W_i[i] += EPSILON
+            value[i] = ((self.mse(W_i) - self.mse(weights)) / EPSILON)
 
         return value
 
-    def gda(self):
+    def gda(self, weights):
         """ Gradient Descent Algorithm
         Parameters
         ----------
-        None 
+        None
 
         Return
         ------
         None
 
         """
-        weights = np.random.rand(9)
         for i in range(MAX_ITERATIONS):
             weights = weights - LEARNING_RATE * self.grdmse(weights)
-        print("Error: ", self.mse(weights))
+            if(i % 1000 == 0):
+                print('error at iter',i,':', self.mse(weights))
+                print(self.xor_net(0, 0, weights))
+                print(self.xor_net(0, 1, weights))
+                print(self.xor_net(1, 0, weights))
+                print(self.xor_net(1, 1, weights))
+                print(weights)
+        return weights
 
     def __sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))
+        return 1.0 / (1 + np.exp(-x))
 
     def __sigmoid_derivative(self, x):
         return x * (1 - x)
-
-    def __finding_value(self, x1, x2, weights):
-        return self.__sigmoid(np.sum([x1, x2] * weights[0:2]) + weights[2])
 
     def __error_calc(self, x1, x2, d, weights):
         return (self.xor_net(x1, x2, weights) - d) ** 2
 
 
 def main():
+    np.random.seed(55)
     weights = np.random.rand(9)
+
     weights[2] = 1
     weights[5] = 1
     weights[8] = 1
@@ -114,11 +125,12 @@ def main():
     #     weights = weights - LEARNING_RATE * net.grdmse(weights)
     net.gda()
 
-    print('erorr new state:', net.mse(weights))
+    print('error new state:', net.mse(weights))
     print(net.xor_net(0, 0, weights))
     print(net.xor_net(0, 1, weights))
     print(net.xor_net(1, 0, weights))
     print(net.xor_net(1, 1, weights))
+    print(weights)
 
 
 if __name__ == '__main__':
