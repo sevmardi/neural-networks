@@ -5,7 +5,6 @@ import random
 import sys
 
 
-
 # 15000 iterations is a good point for playing with learning rate
 MAX_ITERATIONS = 130000
 
@@ -15,21 +14,18 @@ LEARNING_RATE = 0.01
 
 EPSILON = 10**-5
 
+
 class Network:
 
     def xor_net(self, x1, x2, weights):
         """
-        Simulate a newwork with the below parameters
+        Simulate a network with the below parameters
         """
-
         hidden1 = self.__sigmoid(np.sum([x1, x2] * weights[0:2]) + weights[2])
         hidden2 = self.__sigmoid(np.sum([x1, x2] * weights[3:5]) + weights[5])
 
-        output = self.__sigmoid(np.sum([hidden1, hidden2] * weights[6:7]) + weights[8])
-
-        #self.input_nodes = self.__finding_value(x1, x2, weights[])
-        #self.hidden_nodes = self.__finding_value(x1, x2, weights[])
-        #self.output_nodes = self.__finding_value(x1, x2, weights[])
+        output = self.__sigmoid(
+            np.sum([hidden1, hidden2] * weights[6:7]) + weights[8])
 
         return output
 
@@ -69,8 +65,6 @@ class Network:
         """
         value = np.zeros(9)
 
-
-
         for i in range(0, 9):
             W_i = copy.copy(weights)
             W_i[i] += EPSILON
@@ -86,13 +80,13 @@ class Network:
 
         Return
         ------
-        None
+        weights
 
         """
         for i in range(MAX_ITERATIONS):
             weights = weights - LEARNING_RATE * self.grdmse(weights)
             if(i % 1000 == 0):
-                print('error at iter',i,':', self.mse(weights))
+                print('error at iter', i, ':', self.mse(weights))
                 print(self.xor_net(0, 0, weights))
                 print(self.xor_net(0, 1, weights))
                 print(self.xor_net(1, 0, weights))
@@ -121,8 +115,6 @@ def main():
 
     print('init error', net.mse(weights))
 
-    # for i in range(MAX_ITERATIONS):
-    #     weights = weights - LEARNING_RATE * net.grdmse(weights)
     weights = net.gda(weights)
 
     print('Final Error:', net.mse(weights))
