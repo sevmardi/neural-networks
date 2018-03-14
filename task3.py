@@ -128,3 +128,8 @@ print("In test set the misclassified rate of digit 0 is " + str(mis_test6 / len(
 print ("In test set the misclassified rate of digit 6 is " + str(mis_test0 / len(test6)))
 print ("In test set the overall misclassified rate is " + str((mis_test0 + mis_test6) / (len(test6) + len(test0))))
 
+bins = np.linspace(min(dist0), max(dist6), 60)
+plt.hist(dist0, bins, alpha=0.5, label='digit0')
+plt.hist(dist6, bins, alpha=0.5, label='digit6')
+plt.legend(loc='upper right')
+plt.show()

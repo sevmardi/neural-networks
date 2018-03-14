@@ -18,7 +18,7 @@ class Network:
 
     def xor_net(self, x1, x2, weights):
         """
-        
+        Simulate a newwork with the below parameters    
         """
         self.input_nodes = self.__finding_value(x1, x2, weights[0:3])
         self.hidden_nodes = self.__finding_value(x1, x2, weights[3:6])
@@ -54,9 +54,11 @@ class Network:
 
         Parameters 
         ----------
+        Weights: Node weights  
 
         Return
         ------
+        
         """
         value = np.zeros(9)
 
@@ -108,9 +110,9 @@ def main():
 
     print('init error', net.mse(weights))
 
-    for i in range(MAX_ITERATIONS):
-        if i > (MAX_ITERATIONS - 5):
-            weights = weights - LEARNING_RATE * net.grdmse(weights)
+    # for i in range(MAX_ITERATIONS):
+    #     weights = weights - LEARNING_RATE * net.grdmse(weights)
+    net.gda()
 
     print('erorr new state:', net.mse(weights))
     print(net.xor_net(0, 0, weights))
