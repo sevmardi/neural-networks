@@ -5,17 +5,22 @@ import random
 import sys
 
 
-# 15000 iterations is a good point for playing with learning rate
+
+# 130000 iterations is gives good final results
 MAX_ITERATIONS = 130000
 
 # setting this too low makes everything change very slowly, but too high
-# makes it jump at each and every example and oscillate. I found .5 to be good
+# makes it jump at each and every example and oscillate.
 LEARNING_RATE = 0.01
 
 EPSILON = 10**-5
 
+error_curve = []
+weights_all = []
 
 class Network:
+
+
 
     def xor_net(self, x1, x2, weights):
         """
@@ -24,8 +29,11 @@ class Network:
         hidden1 = self.__sigmoid(np.sum([x1, x2] * weights[0:2]) + weights[2])
         hidden2 = self.__sigmoid(np.sum([x1, x2] * weights[3:5]) + weights[5])
 
-        output = self.__sigmoid(
-            np.sum([hidden1, hidden2] * weights[6:7]) + weights[8])
+        output = self.__sigmoid(np.sum([hidden1, hidden2] * weights[6:8]) + weights[8])
+
+        #self.input_nodes = self.__finding_value(x1, x2, weights[])
+        #self.hidden_nodes = self.__finding_value(x1, x2, weights[])
+        #self.output_nodes = self.__finding_value(x1, x2, weights[])
 
         return output
 
@@ -85,8 +93,11 @@ class Network:
         """
         for i in range(MAX_ITERATIONS):
             weights = weights - LEARNING_RATE * self.grdmse(weights)
+
             if(i % 1000 == 0):
-                print('error at iter', i, ':', self.mse(weights))
+                error_curve.append(self.mse(weights))
+                weights_all.append((weights))
+                print('error at iter',i,':', self.mse(weights))
                 print(self.xor_net(0, 0, weights))
                 print(self.xor_net(0, 1, weights))
                 print(self.xor_net(1, 0, weights))
@@ -108,6 +119,7 @@ def main():
     np.random.seed(55)
     weights = np.random.rand(9)
 
+
     weights[2] = 1
     weights[5] = 1
     weights[8] = 1
@@ -116,6 +128,10 @@ def main():
     print('init error', net.mse(weights))
 
     weights = net.gda(weights)
+
+
+    np.savetxt('data/t5-mse', error_curve)
+    np.savetxt('data/t5-weights', weights_all)
 
     print('Final Error:', net.mse(weights))
     print(net.xor_net(0, 0, weights))
