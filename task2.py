@@ -16,21 +16,6 @@ test_in = np.genfromtxt("data/test_in.csv", delimiter=",")
 train_out = np.genfromtxt("data/train_out.csv")
 test_out = np.genfromtxt("data/test_out.csv")
 
-
-# train_in = pd.read_csv('data/train_in.csv', sep=',',header=None)
-# train_out = pd.read_csv('data/train_out.csv', sep=',',header=None)
-# test_in = pd.read_csv('data/test_in.csv', sep=',',header=None)
-# test_out = pd.read_csv('data/test_out.csv', sep=',',header=None)
-
-
-# Prepare the data
-# train = pd.concat([train_out, train_in], axis = 1)
-# train.columns = range(0, 257)
-
-# test = pd.concat([test_out, test_in], axis = 1)
-# test.columns = range(0, 257)
-
-
 # create ordered dictionary with (list_#digit: vectors)
 d = OrderedDict(("list_" + str(i), []) for i in range(10))
 
@@ -46,8 +31,8 @@ centers = np.zeros((10, 256))
 for i in range(10):
     centers[i, :] = np.mean(d["list_" + str(i)], axis=0)
 
-# for i in range(10):
-#     print("number of " + str(i) + "s: " + str(len(d["list_" + str(i)])))
+for i in range(10):
+    print("number of " + str(i) + "s: " + str(len(d["list_" + str(i)])))
 
 # calculate radii
 radii = np.zeros((10, 1))
@@ -65,11 +50,11 @@ centers_dist = np.zeros((10, 10))
 for i in range(10):
     for j in range(10):
         centers_dist[i, j] = np.linalg.norm(centers[i, :] - centers[j, :])
-# print("Distances between each centers")
-# print(centers_dist)
+print("Distances between each centers")
+print(centers_dist)
 
 
-#TASK 2 
+# TASK 2
 
 train_classified = []
 for i in range(len(train_in)):
@@ -82,10 +67,11 @@ for i in range(len(train_in)):
 conf_matrix_train = confusion_matrix(train_out, train_classified)
 
 
-#calcute the correctly classified digits
+# calcute the correctly classified digits
 correct_rate_train = np.zeros(10)
 for i in range(10):
-    correct_rate_train[i] = float(conf_matrix_train[i,i])/np.sum(conf_matrix_train[i,:])
+    correct_rate_train[i] = float(
+        conf_matrix_train[i, i]) / np.sum(conf_matrix_train[i, :])
 
 print("correct rate of training data")
 print(correct_rate_train)
@@ -105,19 +91,11 @@ conf_matrix_test = confusion_matrix(test_out, test_classified)
 
 correct_rate_test = np.zeros(10)
 for i in range(10):
-    correct_rate_test[i] = float(conf_matrix_test[i,i])/np.sum(conf_matrix_test[i,:])
+    correct_rate_test[i] = float(
+        conf_matrix_test[i, i]) / np.sum(conf_matrix_test[i, :])
 
 print("correct rate on testing data")
 print(correct_rate_test)
-
-
-
-
-
-
-
-
-
 
 
 def plot_confusion_matrix(cm, classes,
@@ -154,20 +132,18 @@ def plot_confusion_matrix(cm, classes,
     plt.xlabel('Predicted label')
 
 
-class_name = np.array([0,1,2,3,4,5,6,7,8,9])
+class_name = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 np.set_printoptions(precision=2)
 
-#train confusion matrix
+# train confusion matrix
 plt.figure()
-plot_confusion_matrix(conf_matrix_train, classes=class_name, title = 'Confusion matix training set')
+plot_confusion_matrix(conf_matrix_train, classes=class_name,
+                      title='Confusion matix training set')
 plt.savefig("train_euclidean.png")
 # plt.show()
 
 
 plt.figure()
-plot_confusion_matrix(conf_matrix_test, classes=class_name, title='Confusion matrix test set')
+plot_confusion_matrix(conf_matrix_test, classes=class_name,
+                      title='Confusion matrix test set')
 plt.savefig("test_euclidean.png")
-
-
-
-

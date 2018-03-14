@@ -5,8 +5,9 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import itertools
 import warnings
+import statistics
 from timeit import default_timer as timer
-
+from scipy.spatial import distance
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 np.set_printoptions(threshold=np.nan)
@@ -20,116 +21,140 @@ test_in = np.genfromtxt("data/test_in.csv", delimiter=",")
 train_out = np.genfromtxt("data/train_out.csv")
 test_out = np.genfromtxt("data/test_out.csv")
 
-# create ordered dict to categorize the digits with
-digits = OrderedDict(('list_' + str(i), []) for i in range(10))
-address_dict = OrderedDict(("list_" + str(i), []) for i in range(10))
-digits_test = OrderedDict(("list_" + str(i), []) for i in range(10))
-address_dict_test = OrderedDict(("list_" + str(i), []) for i in range(10))
+def draw_digit(itemid):
+    image = train_in[itemid]
+    image.shape = (16, 16)
+    subimage = image[8:16, 0:16]
 
-for i in range(10):
-    # trainset
-    for j in range(len(train_out)):
-        if train_out[j] == i:
-            digits["list_" + str(i)].append(train_in[j, :])
-            address_dict["list_" + str(i)].append(j)
-    # testset
-    for k in range(len(test_out)):
-        if test_out[k] == i:
-            digits_test["list_" + str(i)].append(test_in[k, :])
-            address_dict_test["list_" + str(i)].append(k)
+    # plotting integers and their lower halves
+    im = plt.imshow(image, cmap='gray')
+    # plt.savefig('report/figures/integers/'+str(itemid)+'.png')
+    plt.show()
 
-# means/centers as (10,256)-array
-centers = np.zeros((10, 256))
-for i in range(10):
-    centers[i, :] = np.mean(digits["list_" + str(i)], axis=0)
-
-# number of points that belong to C_i, n_i
-# for i in range(10):
-#     print("number of " + str(i) + "s: " + str(len(digits["list_" + str(i)])))
-
-# calculate radii
-raddi = np.zeros((10, 1))
-for i in range(10):
-    radius = 0
-    for point in digits["list_" + str(i)]:
-        new_radius = np.linalg.norm(point - centers[i, :])
-        if new_radius >= radius:
-            radius = new_radius
-    raddi[i] = radius
-
-# create a distance matrix between centers
-centers_dist = np.zeros((10, 10))
-for i in range(10):
-    for j in range(10):
-        centers_dist[i, j] = pairwise_distances(
-            centers[i, :], centers[j, :], metric='euclidean')
-
-# Task 3
-digits0 = np.array(digits["list_0"])
-test0 = np.array(digits_test["list_0"])
-
-digits6 = np.array(digits["list_6"])
-test6 = np.array(digits_test["list_6"])
+    im2 = plt.imshow(subimage, cmap='gray')
+    # plt.savefig('report/figures/integers/lh-'+str(itemid)+'.png')
+    plt.show()
 
 
-dist0 = np.zeros(len(digits0))
-dist6 = np.zeros(len(digits6))
-dist_test0 = np.zeros(len(test0))
-dist_test6 = np.zeros(len(test6))
-mis_counts0 = np.zeros(80)
-mis_counts6 = np.zeros(80)
-mis_test0 = 0.0
-mis_test6 = 0.0
+def extract_feature(data_in, data_out):
+    # we chose to look at the lower halves of 5s and 7s, and measure the mean grey values (intensity)
+    # we observed that the curve in lh of 5s should give a higher mean
+    # intensity than the straight stem of a 7.
+    lh_intensity_all = []
+    lh_intensity = {}
 
-for i in range(len(dist0)):
-    dist0[i] = pairwise_distances(digits[0], centers[0], metric='euclidean') - pairwise_distances(digits0[6],  metric="euclidean")
-    for j in range(80):
-        if dist0[i] > -4 + 0.1 * j:
-            mis_counts0[j] += 1
+    correct_57 = {}
+    subimage = []
 
-misclassified = mis_counts0 + mis_counts6
-mis_rate0 = np.copy(mis_counts0) / len(dist0)
-mis_rate6 = np.copy(mis_counts6) / len(dist6)
-mis_rate = np.copy(misclassified) / (len(dist0) + len(dist6))
+    for i in range(len(data_in)):
+        image = data_in[i]
+        image.shape = (16, 16)
+        subimage.append(image[8:16, 0:16])
+        if data_out[i] == 5 or data_out[i] == 7:
+            lh_intensity[i] = float(format(subimage[i].mean(), '.2f'))
 
-#Plot
-bins = np.linspace(min(dist0), max(dist6), 60)
-plt.hist(dist0, bins, alpha=0.5, label='digit0')
-plt.hist(dist6, bins, alpha=0.5, label='digit6')
-plt.legen(loc='Upper right')
-plt.show()
+    for key, value in lh_intensity.items():
+        correct_57[key] = int(data_out[key])
 
-# plot the mis classified rate according to the classifier position 
-mis_x = np.linspace(-4, 4, 80)
-opt_classifier = -4 + 0.1 * np.argmin(misclassified)
-plt.figure(3)
-plt.plot(mis_x, mis_rate0, label="digit0 misclassified rate")
-plt.plot(mis_x, mis_rate6, label="digit6 misclassified rare")
-plt.plot(mis_x, mis_rate, label="total misclassified rate")
-plt.legend(loc=0)
-plt.show()
+    return(lh_intensity, correct_57)
 
-print("The optimal classifier would be at " + str(opt_classifier))
-print("In training set the misclassified rate is " + str(min(misclassified) / (len(dist0) + len(dist6))))
-print("The misclassified rate of digit 0 is " + str(mis_counts6[np.argmin(misclassified)] / len(dist0)))
-print("The misclassified digit 0 and 6 are " + str(mis_counts0[np.argmin(misclassified)] / len(dist6)))
 
-#Applying the classifier on the test dataset 
+def get_mean(feature):
+    values = [feature[key] for key in feature]
+    mean = float(format(statistics.mean(values), '.2f'))
+    return(mean)
 
-for i in range(len(test)):
-    dist_test0[i] = pairwise_distances(test0[i], centers[0], metric='euclidean') - pairwise_distances(test0[i], centers[6], metric="euclidean")
-    if dist_test0[i] > opt_classifier:
-        mis_test0 += 1
-for i in range(len(test6)):
-    dist6[i] = pairwise_distances(test6[i], centers[0], metric='euclidean') - pairwise_distances(test6[i], centers[6], metric="euclidean")
-    if dist_test6[i] <= opt_classifier:
-        mis_counts6 +=1
-print("In test set the misclassified rate of digit 0 is " + str(mis_test6 / len(test0)))
-print ("In test set the misclassified rate of digit 6 is " + str(mis_test0 / len(test6)))
-print ("In test set the overall misclassified rate is " + str((mis_test0 + mis_test6) / (len(test6) + len(test0))))
 
-bins = np.linspace(min(dist0), max(dist6), 60)
-plt.hist(dist0, bins, alpha=0.5, label='digit0')
-plt.hist(dist6, bins, alpha=0.5, label='digit6')
-plt.legend(loc='upper right')
-plt.show()
+def generate_histograms_from_training(lh_intensity, correct_57):
+    # generate histograms of lower half mean intensities of 5s and 7s from
+    # training data
+    hist5 = {}
+    hist7 = {}
+
+    for key, value in correct_57.items():
+        if value == 5:
+            if(lh_intensity[key] in hist5.keys()):
+                hist5[lh_intensity[key]] = hist5[lh_intensity[key]] + 1
+            else:
+                hist5[lh_intensity[key]] = 1
+        elif value == 7:
+            if(lh_intensity[key] in hist7.keys()):
+                hist7[lh_intensity[key]] = hist7[lh_intensity[key]] + 1
+            else:
+                hist7[lh_intensity[key]] = 1
+
+    return (hist5, hist7)
+
+
+def draw_histogram(hist5, hist7):
+    fives = plt.bar(list(hist5.keys()), hist5.values(), color='g',
+                    alpha=0.5, width=0.01, label='intensity of 5s')
+    sevens = plt.bar(list(hist7.keys()), hist7.values(), color='b',
+                     alpha=0.5, width=0.01, label='intensity of 7s')
+    plt.legend(handles=[fives, sevens])
+    plt.xlabel('intensity with 2 decimal space precision')
+    plt.ylabel('occurrence')
+    plt.title('Histogram of bottom half mean intensities for 5s and 7s')
+    # plt.savefig('report/figures/plots/57hist.png')
+    plt.show()
+
+
+def bayes_classification(feature, correct, hist5, hist7):
+    mean = get_mean(feature)
+    # calculate priors
+    P_C5 = sum(hist5.values()) / (sum(hist7.values()) + sum(hist5.values()))
+    P_C7 = sum(hist7.values()) / (sum(hist7.values()) + sum(hist5.values()))
+
+    classification = {}
+
+    for key, value in feature.items():
+        # in case of uncertainty, if the value could either represent a 5 or a
+        # 7, apply bayes theorem
+        if(value in hist5.keys() and value in hist7.keys()):
+            # class-conditionals
+            P_X_C5 = hist5[value] / (hist7[value] + hist5[value])
+            P_X_C7 = hist7[value] / (hist7[value] + hist5[value])
+            # scaling factor
+            P_X = P_X_C5 * P_C5 + P_X_C7 * P_C7
+            # posteriors
+            P_C5_X = (P_X_C5 * P_C5) / P_X
+            P_C7_X = (P_X_C7 * P_C7) / P_X
+            if(np.random.rand() < P_C7_X):
+                classification[key] = 7
+            else:
+                classification[key] = 5
+        # fallback to classifying, using mean as decision boundary.
+        elif value < mean:
+            classification[key] = 7
+        else:
+            classification[key] = 5
+
+    print(correct)
+    print(classification)
+
+    a = np.array(list(correct.values()))
+    b = np.array(list(classification.values()))
+
+    print(confusion_matrix(a, b))
+    acc = (a == b).sum() / len(a)
+    print(acc)
+
+
+def main():
+    draw_digit(420)
+    draw_digit(3)
+    lh_training, correct_training = extract_feature(train_in, train_out)
+    hist5, hist7 = generate_histograms_from_training(
+        lh_training, correct_training)
+    draw_histogram(hist5, hist7)
+
+    lh_testing, correct_testing = extract_feature(test_in, test_out)
+
+    bayes_classification(lh_training, correct_training, hist5, hist7)
+    # try classifying the test data, using the feature histograms from our
+    # training data
+    bayes_classification(lh_testing, correct_testing, hist5, hist7)
+
+
+if __name__ == '__main__':
+    main()

@@ -52,8 +52,8 @@ for i in range(10):
 		print ("Distance (" + str(i) + ", " + str(j) + ") = " + str(np.linalg.norm(centers[i,:]-centers[j,:])))
 		# distance_matrix[i, j] = np.around((np.linalg.norm(centers[i, :])), decimals=2)
 
-# for i in range(10):
-# 	print(np.around(np.mean(distance_matrix[i,:]), decimals=2))
+for i in range(10):
+	print(np.around(np.mean(distance_matrix[i,:]), decimals=2))
 
 
 # for i in range(10):
