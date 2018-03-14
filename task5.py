@@ -123,9 +123,9 @@ def main():
 
     # for i in range(MAX_ITERATIONS):
     #     weights = weights - LEARNING_RATE * net.grdmse(weights)
-    net.gda(weights)
+    weights = net.gda(weights)
 
-    print('error new state:', net.mse(weights))
+    print('Final Error:', net.mse(weights))
     print(net.xor_net(0, 0, weights))
     print(net.xor_net(0, 1, weights))
     print(net.xor_net(1, 0, weights))
