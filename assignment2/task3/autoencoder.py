@@ -50,7 +50,7 @@ x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 # print(x_train.shape)
 # print(x_test.shape)
 
-autoencoder.fit(x_train, x_train, epochs=50, batch_size=256,
+autoencoder.fit(x_train, x_train, epochs=100, batch_size=256,
                 shuffle=True, validation_data=(x_test, x_test))
 
 encoded_imgs = encoder.predict(x_test)
