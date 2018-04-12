@@ -59,23 +59,23 @@ decoded_imgs = decoder.predict(encoded_imgs)
 pickle.dump(decoded_imgs, open("decoded_imgs_50runs.pickle", "wb" ))
 
 
-import matplotlib.pyplot as plt
-n = 10  # digits to display
-plt.figure(figsize=(20, 4))
-for i in range(n):
-    # display orginal
-    ax = plt.subplot(2, n, i + 1)
-    plt.imshow(x_test[i].reshape(28, 28))
-    plt.gray()
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
+# import matplotlib.pyplot as plt
+# n = 10  # digits to display
+# plt.figure(figsize=(20, 4))
+# for i in range(n):
+#     # display orginal
+#     ax = plt.subplot(2, n, i + 1)
+#     plt.imshow(x_test[i].reshape(28, 28))
+#     plt.gray()
+#     ax.get_xaxis().set_visible(False)
+#     ax.get_yaxis().set_visible(False)
 
-    # display reconstruction
-    ax = plt.subplot(2, n, i + 1 + n)
-    plt.imshow(decoded_imgs[i].reshape(28, 28))
-    plt.gray()
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
+#     # display reconstruction
+#     ax = plt.subplot(2, n, i + 1 + n)
+#     plt.imshow(decoded_imgs[i].reshape(28, 28))
+#     plt.gray()
+#     ax.get_xaxis().set_visible(False)
+#     ax.get_yaxis().set_visible(False)
 
 
 # plt.savefig('plot.png')
