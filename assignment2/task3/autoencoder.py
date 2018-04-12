@@ -1,6 +1,10 @@
 from keras.layers import Input, Dense
 from keras.models import Model
-import pickle 
+import pickle as pic
+import time
+import resource
+
+start_time = time.time()
 
 # import resource
 # resource.setrlimit(resource.RLIMIT_NPROC, (1, 1))
@@ -42,7 +46,6 @@ import numpy as np
 
 (x_train, _), (x_test, _) = mnist.load_data()
 
-
 x_train = x_train.astype('float32') / 255.
 x_test = x_test.astype('float32') / 255.
 x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
@@ -55,14 +58,14 @@ autoencoder.fit(x_train, x_train, epochs=100, batch_size=256,
 
 encoded_imgs = encoder.predict(x_test)
 decoded_imgs = decoder.predict(encoded_imgs)
-pickle.dump(decoded_imgs, open("decoded_imgs_100runs.pickle", "wb" ))
 
+pic.dump(decoded_imgs, open("decoded_imgs_500runs.pickle", "wb"))
 
+print("\ntime taken %s seconds " % str(time.time() - start_time))
+mem_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+print("Memory: " + str(mem_usage) + " kilobytes")
 
-
-
-# import pickle as pic 
-# data_pic = "decoded_imgs_50runs.pickle"
+# data_pic = "decoded_imgs_500runs.pickle"
 # decoded_imgs = pic.load(open(data_pic, 'rb'))
 # import matplotlib.pyplot as plt
 # n = 10  # digits to display
@@ -83,4 +86,4 @@ pickle.dump(decoded_imgs, open("decoded_imgs_100runs.pickle", "wb" ))
 #     ax.get_yaxis().set_visible(False)
 
 
-# plt.savefig('plot.png')
+# plt.savefig('plot_500_runs.png')
