@@ -50,15 +50,20 @@ x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 # print(x_train.shape)
 # print(x_test.shape)
 
-autoencoder.fit(x_train, x_train, epochs=50, batch_size=256,
-                shuffle=True, validation_data=(x_test, x_test))
+# autoencoder.fit(x_train, x_train, epochs=50, batch_size=256,
+#                 shuffle=True, validation_data=(x_test, x_test))
 
 encoded_imgs = encoder.predict(x_test)
 decoded_imgs = decoder.predict(encoded_imgs)
+pickle.dump(decoded_imgs, open("decoded_imgs_100runs.pickle", "wb" ))
 
-pickle.dump(decoded_imgs, open("decoded_imgs_50runs.pickle", "wb" ))
 
 
+
+
+# import pickle as pic 
+# data_pic = "decoded_imgs_50runs.pickle"
+# decoded_imgs = pic.load(open(data_pic, 'rb'))
 # import matplotlib.pyplot as plt
 # n = 10  # digits to display
 # plt.figure(figsize=(20, 4))
