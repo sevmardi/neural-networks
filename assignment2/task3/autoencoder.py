@@ -3,6 +3,7 @@ from keras.models import Model
 import pickle as pic
 import time
 import resource
+from keras import regularizers
 
 start_time = time.time()
 
@@ -58,7 +59,7 @@ autoencoder.fit(x_train, x_train, epochs=100, batch_size=256,
 encoded_imgs = encoder.predict(x_test)
 decoded_imgs = decoder.predict(encoded_imgs)
 
-# pic.dump(decoded_imgs, open("decoded_imgs_500runs.pickle", "wb"))
+pic.dump(decoded_imgs, open("decoded_imgs_100runs.pickle", "wb"))
 
 print("\ntime taken %s seconds " % str(time.time() - start_time))
 mem_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
