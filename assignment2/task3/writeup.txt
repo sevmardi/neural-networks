@@ -1,0 +1,8 @@
+For starters I run the code form the blog up untill to the point where adding a sparsity constraint on the encoded representations. 
+The first run took about a minute running on tritanium with epochs set to 50 runs. The results are to be seen below. Afterwards I played around with that number and run it again on 100 epochs the which took around five minutes on the same machine. Finally I bumped that number towards 500 for more accurate results which took actactly 16 minutes [save machine] and used around 542MB of ram. 
+
+Adding a sparsity constraint on the encoded representations
+------------------------------------------------------------
+Afterwards 
+
+

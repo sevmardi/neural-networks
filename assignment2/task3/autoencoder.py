@@ -17,10 +17,9 @@ encoding_dim = 32
 input_img = Input(shape=(784,))
 
 # "encoded" is the encoded representation of the input
-encoded = Dense(encoding_dim, activation='relu')(input_img)
+encoded = Dense(encoding_dim, activation='relu', activity_regularizer=regularizers.l1(10e-5))(input_img)
 # "decoded" is the lossy reconstruction of the input
 decoded = Dense(784, activation='sigmoid')(encoded)
-
 # this model maps in input to its reconstruction
 autoencoder = Model(input_img, decoded)
 
@@ -53,13 +52,13 @@ x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 # print(x_train.shape)
 # print(x_test.shape)
 
-autoencoder.fit(x_train, x_train, epochs=500, batch_size=256,
+autoencoder.fit(x_train, x_train, epochs=100, batch_size=256,
                 shuffle=True, validation_data=(x_test, x_test))
 
 encoded_imgs = encoder.predict(x_test)
 decoded_imgs = decoder.predict(encoded_imgs)
 
-pic.dump(decoded_imgs, open("decoded_imgs_500runs.pickle", "wb"))
+# pic.dump(decoded_imgs, open("decoded_imgs_500runs.pickle", "wb"))
 
 print("\ntime taken %s seconds " % str(time.time() - start_time))
 mem_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
