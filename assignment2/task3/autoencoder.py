@@ -4,6 +4,9 @@ import pickle as pic
 import time
 import resource
 from keras import regularizers
+from keras.datasets import mnist
+import numpy as np
+
 
 start_time = time.time()
 
@@ -18,9 +21,13 @@ encoding_dim = 32
 input_img = Input(shape=(784,))
 
 # "encoded" is the encoded representation of the input
-encoded = Dense(encoding_dim, activation='relu', activity_regularizer=regularizers.l1(10e-5))(input_img)
+encoded = Dense(encoding_dim, activation='relu',
+                activity_regularizer=regularizers.l1(10e-5))(input_img)
+
+
 # "decoded" is the lossy reconstruction of the input
 decoded = Dense(784, activation='sigmoid')(encoded)
+
 # this model maps in input to its reconstruction
 autoencoder = Model(input_img, decoded)
 
@@ -41,9 +48,7 @@ decoder = Model(encoded_input, decoder_layer(encoded_input))
 autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
 
 
-from keras.datasets import mnist
-import numpy as np
-
+# Load the data
 (x_train, _), (x_test, _) = mnist.load_data()
 
 x_train = x_train.astype('float32') / 255.
@@ -53,37 +58,40 @@ x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 # print(x_train.shape)
 # print(x_test.shape)
 
+#traing the model
 autoencoder.fit(x_train, x_train, epochs=100, batch_size=256,
                 shuffle=True, validation_data=(x_test, x_test))
 
 encoded_imgs = encoder.predict(x_test)
 decoded_imgs = decoder.predict(encoded_imgs)
 
-pic.dump(decoded_imgs, open("decoded_imgs_100runs.pickle", "wb"))
 
 print("\ntime taken %s seconds " % str(time.time() - start_time))
 mem_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 print("Memory: " + str(mem_usage) + " kilobytes")
 
-# data_pic = "decoded_imgs_500runs.pickle"
+# pic.dump(decoded_imgs, open("decoded_imgs_100runs.pickle", "wb"))
+# data_pic = "decoded_imgs_100runs.pickle"
 # decoded_imgs = pic.load(open(data_pic, 'rb'))
-# import matplotlib.pyplot as plt
-# n = 10  # digits to display
-# plt.figure(figsize=(20, 4))
-# for i in range(n):
-#     # display orginal
-#     ax = plt.subplot(2, n, i + 1)
-#     plt.imshow(x_test[i].reshape(28, 28))
-#     plt.gray()
-#     ax.get_xaxis().set_visible(False)
-#     ax.get_yaxis().set_visible(False)
-
-#     # display reconstruction
-#     ax = plt.subplot(2, n, i + 1 + n)
-#     plt.imshow(decoded_imgs[i].reshape(28, 28))
-#     plt.gray()
-#     ax.get_xaxis().set_visible(False)
-#     ax.get_yaxis().set_visible(False)
 
 
-# plt.savefig('plot_500_runs.png')
+import matplotlib.pyplot as plt
+n = 10  # digits to display
+plt.figure(figsize=(20, 4))
+for i in range(n):
+    # display orginal
+    ax = plt.subplot(2, n, i + 1)
+    plt.imshow(x_test[i].reshape(28, 28))
+    plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+
+    # display reconstruction
+    ax = plt.subplot(2, n, i + 1 + n)
+    plt.imshow(decoded_imgs[i].reshape(28, 28))
+    plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+
+
+plt.savefig('plot_100_runs_regularization.png')

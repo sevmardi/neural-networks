@@ -3,6 +3,16 @@ The first run took about a minute running on tritanium with epochs set to 50 run
 
 Adding a sparsity constraint on the encoded representations
 ------------------------------------------------------------
-Afterwards 
+Afterwards I trained the model for 100 epochs with added regularization which reduces the likelihood for the model to overfit and can be trained longer. It took around ~4 mintues and took the same amount of RAM. The model ends with a  loss of 0.27 on both training and testing. Below the visualization
+
+[the results are pretty bad!]
+
+At first the results were pretty bad for some unknown reason to me. I run this on the DSLabs and below is the results. 
+
+
+Deep autoencoder
+----------------
+
+We do not have to limit ourselves to asingle layer as encoder or decoder, we could instead use a stack of layers, such as:
 
 
