@@ -12,4 +12,13 @@ The next step was to not limit ourselves to asingle layer as encoder or decoder,
 [show code]
 
 
+Convolutional autoencoder
+---------------------------
+Using convoluation neural networks on images makes somehow sense. In practical settings, autoencoders applied to images are always convolutional autoencoders --they simply perform much better. In the blog [1] there is an implmentation provided of an encoder which consits of Conv2d and MaxPooling2D layers (max pooling being used for spatial down-sampling), decoder will consist in a stack of Conv2D and UpSampling2D layers.
+We ran the implemntation on 50 epochs and below is our results. Which is in this case, quite suprisently, very similiar to the output of the blog post. 
+ 
+
+
+[1] https://blog.keras.io/building-autoencoders-in-keras.html
+
 
