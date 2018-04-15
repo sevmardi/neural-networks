@@ -17,6 +17,40 @@ Convolutional autoencoder
 Using convoluation neural networks on images makes somehow sense. In practical settings, autoencoders applied to images are always convolutional autoencoders --they simply perform much better. In the blog [1] there is an implmentation provided of an encoder which consits of Conv2d and MaxPooling2D layers (max pooling being used for spatial down-sampling), decoder will consist in a stack of Conv2D and UpSampling2D layers.
 We ran the implemntation on 50 epochs and below is our results. our loss function was about loss: 0.1024 and val loss function 0.1069 which is somehow better than our previous models converges
 
+Below our results on 50 epochs
+
+[show image]
+
+We also tried the solution on the 128-dimensional representations. These, however, are 8x4x4, so we reshaped them to 4x32 in order to be able to display them as grayscale images.
+
+[show image]
+
+
+Application to image denoising
+-----------------------------
+Afterwards we experminted by applying image denosing problem to convulutional autoencoder. So basically we train our existing autoencoder to map the noisy digits images to clear digits images. We applied gaussian noise matrix and cliped the images between 0 and 1
+
+Below our results 
+
+[show image]
+
+As you can see the image is barely recognizeable. We than compared this approache to our previous convolutional autoencoder, this in order to improve the quality of the reconstructed image.
+After slight modification in the code we ran the model for 100 epochs on the training and below is our results. 
+
+[show image] 
+
+
+Sequence-to-sequence autoencoder
+-------------------------------
+Let's suppose our inputs are sequences rather than vectors or 2D images. In this case we may want to use as encoder and decorder a type of model that can capture temporal structure, such as LSTM. We experimented with LSTM-based autoencoder, first used a LSTM encoder to turn our inputs sequences into a single vector that contains information about the entire sequence, then repeat this vector n times (where n is the number of timesteps in the output sequence) and ran a LSTM decoder to turn this constant sequence into the target sequence.
+
+[show image]
+
+
+Variational Autoencoder (VAE)
+------------------------------
+Variational autoencoders are a slightly more modern and interesting take on autoencoding.
+VAE is a type of autoencoder with added constraints on the encoded representations being learned. More precisely, it is an autoencoder that learns a latent variable model for its input data. So instead of letting your neural network learn an arbitrary function, you are learning the parameters of a probability distribution modeling your data. If you sample points from this distribution, you can generate new input data samples: a VAE is a "generative model".
 
 
 
