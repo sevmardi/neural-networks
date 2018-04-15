@@ -53,12 +53,7 @@ autoencoder.fit(x_train, x_train, epochs=100, batch_size=256,
 encoded_imgs = encoder.predict(x_test)
 decoded_imgs = decoder.predict(encoded_imgs)
 
-
-# print("\ntime taken %s seconds " % str(time.time() - start_time))
-# mem_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-# print("Memory: " + str(mem_usage) + " kilobytes")
-
-pic.dump(decoded_imgs, open("decoded_imgs_100runs.pickle", "wb"))
+pic.dump(decoded_imgs, open("pickles/deep_100.pickle", "wb"))
 print('Success dump!')
 
 # data_pic = "decoded_imgs_100runs.pickle"
