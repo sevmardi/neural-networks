@@ -25,15 +25,34 @@ encoded = Dense(128, activation='relu')(input_img)
 encoded = Dense(64, activation='relu')(encoded)
 encoded = Dense(32, activation='relu')(encoded)
 
-
 # "decoded" is the lossy reconstruction of the input
 decoded = Dense(64, activation='relu')(encoded)
 decoded = Dense(128, activation='relu')(decoded)
 decoded = Dense(784, activation='sigmoid')(decoded)
 
+
 # this model maps in input to its reconstruction
 autoencoder = Model(input_img, decoded)
+
+# Another model maps an input to its encoded representation
+encoder = Model(input_img, encoded)
+
+# create a placeholder for an encoded (32-dimensional) input
+encoded_input = Input(shape=(encoding_dim,))
+
+# retrieve the last layer of the autoencoder model
+decoder_layer = autoencoder.layers[-1]
+
+# create the decoder model
+decoder = Model(encoded_input, decoder_layer(encoded_input))
+
+
+# configure our model to use a per-pixel binary crossentropy loss, and the
+# Adadelta optimizer
 autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+
+
+
 
 
 # Load the data
@@ -47,7 +66,7 @@ x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 # print(x_test.shape)
 
 #traing the model
-autoencoder.fit(x_train, x_train, epochs=100, batch_size=256,
+autoencoder.fit(x_train, x_train, epochs=2, batch_size=256,
                 shuffle=True, validation_data=(x_test, x_test))
 
 encoded_imgs = encoder.predict(x_test)
