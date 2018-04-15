@@ -22,7 +22,7 @@ batch_size = 100
 original_dim = 784
 latent_dim = 2
 intermediate_dim = 256
-epochs = 2
+epochs = 50
 epsilon_std = 1.0
 
 
@@ -56,7 +56,7 @@ kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axi
 vae_loss = K.mean(xent_loss + kl_loss)
 
 vae.add_loss(vae_loss)
-vae.compile(optimizer='rmsprop')
+vae.compile(optimizer='rmsprop', loss=vae_loss)
 vae.summary()
 
 
