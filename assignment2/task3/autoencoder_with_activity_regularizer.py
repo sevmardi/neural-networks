@@ -24,7 +24,7 @@ encoding_dim = 32
 input_img = Input(shape=(784,))
 
 # "encoded" is the encoded representation of the input
-encoded = Dense(encoding_dim, activation='relu')(input_img)
+encoded = Dense(encoding_dim, activation='relu', activity_regularizer=regularizers.l1(10e-5))(input_img)
 
 # "decoded" is the lossy reconstruction of the input
 decoded = Dense(784, activation='sigmoid')(encoded)

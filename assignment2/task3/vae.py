@@ -82,7 +82,7 @@ x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
 plt.figure(figsize=(6, 6))
 plt.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1], c=y_test)
 plt.colorbar()
-plt.savefig('saved1.png')
+plt.savefig('plots/vae_2d_neighborhoods_of_different_classes.png')
 
 # build a digit generator that can sample from the learned distribution
 decoder_input = Input(shape=(latent_dim,))
@@ -109,4 +109,4 @@ for i, yi in enumerate(grid_x):
 
 plt.figure(figsize=(10, 10))
 plt.imshow(figure, cmap='Greys_r')
-plt.savefig('saved2.png')
+plt.savefig('plots/visualization_of_the_latent_manifold.png')

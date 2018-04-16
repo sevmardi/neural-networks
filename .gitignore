@@ -102,10 +102,6 @@ ENV/
 # mypy
 .mypy_cache/
 
-#steinar
-steinar/data*
-.idea
-plots
 
 #macos..
 .DS_Store
