@@ -37,7 +37,7 @@ if __name__ == '__main__':
     model.add(Dropout(0.5))
     model.add(Dense(10, activation='softmax'))
 
-    mode.compile(loss='categorical_crossentropy',
+    model.compile(loss='categorical_crossentropy',
                  optimizer=Adam(lr=0.0001, decay=1e-6),
                  metrics=['accuracy'])
 
@@ -75,4 +75,3 @@ if __name__ == '__main__':
 
     plt.savefig('plots/cifar.png')
 
-    
