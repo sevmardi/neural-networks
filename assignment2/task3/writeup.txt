@@ -1,9 +1,10 @@
-For starters I run the code form the blog up untill to the point where adding a sparsity constraint on the encoded representations. 
-The first run took about a minute running on tritanium with epochs set to 50 runs. The results are to be seen below. Afterwards I played around with that number and run it again on 100 epochs the which took around five minutes on the same machine. One can't help but to notice how accurate the model is shaping the images. Finally I bumped that number towards 500 for more accurate results which took actactly 16 minutes [save machine] and used around 542MB of ram. I believe if one keeps running this for serveral hours would finally reach the same accurate results as in the orginal image. 
+For starters I run the code form the blog up until to the point where adding a sparsity constraint on the encoded representations. 
+
+The first run took about a minute running on tritanium with epochs set to 50 runs. The results are to be seen below. Afterwards I played around with that number and run it again on 100 epochs the which took around five minutes on the same machine. One can't help but to notice how accurate the model is shaping the images. Finally I bumped that number towards 500 for more accurate results which took exactly 16 minutes [save machine] and used around 542MB of ram. I believe if one keeps running this for several hours would finally reach the same accurate results as in the original image. 
 
 Adding a sparsity constraint on the encoded representations
 ------------------------------------------------------------
-Afterwards I trained the model for 100 epochs with added regularization which reduces the likelihood for the model to overfit and can be trained longer. It took around ~4 mintues and took the same amount of RAM. The model ends with a  loss of 0.27 on both training and testing. The first-sight results were pretty bad for some unknown reason to me. I tweaked the params for serveral times, tried different settings, but unforutently could't get the right results as mentiond in the blog. 
+Afterwards I trained the model for 100 epochs with added regularization which reduces the likelihood for the model to over-fit and can be trained longer. It took around ~4 minutes and took the same amount of RAM. The model ends with a  loss of 0.27 on both training and testing. The first-sight results were pretty bad for some unknown reason to me. I tweaked the params for several times, tried different settings, but unfortunately couldn’t get the right results as mentioned in the blog. 
 
 Deep autoencoder
 ----------------
@@ -14,8 +15,8 @@ The next step was to not limit ourselves to asingle layer as encoder or decoder,
 
 Convolutional autoencoder
 ---------------------------
-Using convoluation neural networks on images makes somehow sense. In practical settings, autoencoders applied to images are always convolutional autoencoders --they simply perform much better. In the blog [1] there is an implmentation provided of an encoder which consits of Conv2d and MaxPooling2D layers (max pooling being used for spatial down-sampling), decoder will consist in a stack of Conv2D and UpSampling2D layers.
-We ran the implemntation on 50 epochs and below is our results. our loss function was about loss: 0.1024 and val loss function 0.1069 which is somehow better than our previous models converges
+Using convolution neural networks on images makes somehow sense. In practical settings, autoencoders applied to images are always convolutional autoencoders --they simply perform much better. In the blog [1] there is an implementation provided of an encoder which consits of Conv2d and MaxPooling2D layers (max pooling being used for spatial down-sampling), decoder will consist in a stack of Conv2D and UpSampling2D layers.
+We ran the implementation on 50 epochs and below is our results. our loss function was about loss: 0.1024 and val loss function 0.1069 which is somehow better than our previous models converges
 
 Below our results on 50 epochs
 
@@ -28,13 +29,13 @@ We also tried the solution on the 128-dimensional representations. These, howeve
 
 Application to image denoising
 -----------------------------
-Afterwards we experminted by applying image denosing problem to convulutional autoencoder. So basically we train our existing autoencoder to map the noisy digits images to clear digits images. We applied gaussian noise matrix and cliped the images between 0 and 1
+Afterwards we experimented by applying image denosing problem to convolutional autoencoder. So basically we train our existing autoencoder to map the noisy digits images to clear digits images. We applied gaussian noise matrix and cliped the images between 0 and 1
 
 Below our results 
 
 [show image]
 
-As you can see the image is barely recognizeable. We than compared this approache to our previous convolutional autoencoder, this in order to improve the quality of the reconstructed image.
+As you can see the image is barely recognizable. We than compared this approach to our previous convolutional autoencoder, this in order to improve the quality of the reconstructed image.
 
 
 After slight modification in the code we ran the model for 100 epochs on the training and below is our results. 
@@ -51,12 +52,11 @@ Let's suppose our inputs are sequences rather than vectors or 2D images. In this
 
 Variational Autoencoder (VAE)
 ------------------------------
-Variational autoencoders are a slightly more modern and interesting take on autoencoding.
-VAE is a type of autoencoder with added constraints on the encoded representations being learned. More precisely, it is an autoencoder that learns a latent variable model for its input data. So instead of letting your neural network learn an arbitrary function, you are learning the parameters of a probability distribution modeling your data. If you sample points from this distribution, you can generate new input data samples: a VAE is a "generative model".
+Variational auto-encoders are a slightly more modern and interesting take on autoencoding.
+VAE is a type of auto-encoder with added constraints on the encoded representations being learned. More precisely, it is an autoencoder that learns a latent variable model for its input data. So instead of letting your neural network learn an arbitrary function, you are learning the parameters of a probability distribution modeling your data. If you sample points from this distribution, you can generate new input data samples: a VAE is a "generative model".
 
 
 
 
 [1] https://blog.keras.io/building-autoencoders-in-keras.html
-
 

@@ -14,10 +14,12 @@ from keras.utils import to_categorical
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
+import os
 
 # For reproducibility
 np.random.seed(1000)
+save_dir = os.path.join(os.getcwd(), 'saved_models')	
+model_name = 'keras_cifar10_trained_model.h5'
 
 if __name__ == '__main__':
     (X_train, Y_train), (X_test, Y_test) = cifar10.load_data()
@@ -50,9 +52,19 @@ if __name__ == '__main__':
     model.fit(X_train / 255.0, to_categorical(Y_train),
               batch_size=128,
               shuffle=True,
-              epochs=2,
+              epochs=250,
               validation_data=(X_test / 255.0, to_categorical(Y_test)),
               callbacks=[EarlyStopping(min_delta=0.001, patience=3)])
+
+	
+
+    if not os.path.isdir(save_dir):
+    	os.makedirs(save_dir)
+    
+    model_path = os.path.join(save_dir, model_name)
+    model.save(model_path)
+    print('Saved trained model at %s ' % model_path)
+
 
     scores = model.evaluate(X_test / 255.0, to_categorical(Y_test))
 
