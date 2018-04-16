@@ -65,27 +65,27 @@ decoded_imgs = autoencoder.predict(x_test)
 # data_pic = "pickles/convolutional_autoencoder_50.pickle"
 # decoded_imgs = pic.load(open(data_pic, 'rb'))
 
-if not os.path.isdir(save_dir):
-	os.makedirs(save_dir)
-model_path = os.path.join(save_dir, model_name)
-autoencoder.save(model_path)
-print('Saved trained model at %s ' % model_path)
+# if not os.path.isdir(save_dir):
+# 	os.makedirs(save_dir)
+# model_path = os.path.join(save_dir, model_name)
+# autoencoder.save(model_path)
+# print('Saved trained model at %s ' % model_path)
 
-# n = 10
-# plt.figure(figsize=(20, 4))
-# for i in range(n):
-# 	# display original
-# 	ax = plt.subplot(2, n, i + 1)
-# 	plt.imshow(x_test[i].reshape(28, 28))
-# 	plt.gray()
-# 	ax.get_xaxis().set_visible(False)
-# 	ax.get_yaxis().set_visible(False)
+n = 10
+plt.figure(figsize=(20, 4))
+for i in range(n):
+	# display original
+	ax = plt.subplot(2, n, i + 1)
+	plt.imshow(x_test[i].reshape(28, 28))
+	plt.gray()
+	ax.get_xaxis().set_visible(False)
+	ax.get_yaxis().set_visible(False)
 
-# 	# display reconstruction
-# 	ax = plt.subplot(2, n, i + n)
-# 	plt.imshow(decoded_imgs[i].reshape(28, 28))
-# 	plt.gray()
-# 	ax.get_xaxis().set_visible(False)
-# 	ax.get_yaxis().set_visible(False)
+	# display reconstruction
+	ax = plt.subplot(2, n, i + n)
+	plt.imshow(decoded_imgs[i].reshape(28, 28))
+	plt.gray()
+	ax.get_xaxis().set_visible(False)
+	ax.get_yaxis().set_visible(False)
 
-# plt.savefig('plots/50_convolutional_autoencoder.png')
+plt.savefig('plots/50_convolutional_autoencoder.png')
