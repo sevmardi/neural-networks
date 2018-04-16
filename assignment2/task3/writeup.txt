@@ -35,6 +35,8 @@ Below our results
 [show image]
 
 As you can see the image is barely recognizeable. We than compared this approache to our previous convolutional autoencoder, this in order to improve the quality of the reconstructed image.
+
+
 After slight modification in the code we ran the model for 100 epochs on the training and below is our results. 
 
 [show image] 
