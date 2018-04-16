@@ -10,6 +10,7 @@ from keras.layers.convolutional import Conv2D
 from keras.optimizers import Adam
 from keras.layers.pooling import MaxPooling2D
 from keras.utils import to_categorical
+import numpy
 
 import matplotlib
 matplotlib.use('Agg')
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     model.fit(X_train / 255.0, to_categorical(Y_train),
               batch_size=128,
               shuffle=True,
-              epochs=250,
+              epochs=0,
               validation_data=(X_test / 255.0, to_categorical(Y_test)),
               callbacks=[EarlyStopping(min_delta=0.001, patience=3)])
 
@@ -69,26 +70,29 @@ if __name__ == '__main__':
     scores = model.evaluate(X_test / 255.0, to_categorical(Y_test))
 
     decoded_imgs = model.predict(X_test)
-
-
     print('Loss: %.3f' % scores[0])
     print('Accuracy: %.3f' % scores[1])
 
+    # loss_history = model.history["loss"]
+    # numpy_loss_history = numpy.array(loss_history)
+    # numpy.savetxt("loss_history.txt", numpy_loss_history, delimiter=",")
 
-    n = 10
-    plt.figure(figsize=(20, 4))
-    for i in range(n):
-    	ax = plt.subplot(2, n, i + 1)
-    	plt.imshow(x_test[i].reshape(28, 28))
-    	plt.gray()
-    	ax.get_xaxis().set_visible(False)
-    	ax.get_yaxis().set_visible(False)
 
-    	ax = plt.subplot(2, n, i + n)
-    	plt.imshow(decoded_imgs[i].reshape(28, 28))
-    	plt.gray()
-    	ax.get_xaxis().set_visible(False)
-    	ax.get_yaxis().set_visible(False)
 
-    plt.savefig('plots/cifar.png')
+    # n = 10
+    # plt.figure(figsize=(20, 4))
+    # for i in range(n):
+    # 	ax = plt.subplot(2, n, i + 1)
+    # 	plt.imshow(x_test[i].reshape(28, 28))
+    # 	plt.gray()
+    # 	ax.get_xaxis().set_visible(False)
+    # 	ax.get_yaxis().set_visible(False)
+
+    # 	ax = plt.subplot(2, n, i + n)
+    # 	plt.imshow(decoded_imgs[i].reshape(28, 28))
+    # 	plt.gray()
+    # 	ax.get_xaxis().set_visible(False)
+    # 	ax.get_yaxis().set_visible(False)
+
+    # plt.savefig('plots/250_cifar.png')
 
