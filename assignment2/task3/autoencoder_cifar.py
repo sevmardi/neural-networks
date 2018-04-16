@@ -45,13 +45,34 @@ if __name__ == '__main__':
     model.fit(X_train / 255.0, to_categorical(Y_train),
               batch_size=128,
               shuffle=True,
-              epochs=250,
+              epochs=2,
               validation_data=(X_test / 255.0, to_categorical(Y_test)),
               callbacks=[EarlyStopping(min_delta=0.001, patience=3)])
 
     scores = model.evaluate(X_test / 255.0, to_categorical(Y_test))
 
+    decoded_imgs = model.predict(X_test)
+
+
     print('Loss: %.3f' % scores[0])
     print('Accuracy: %.3f' % scores[1])
+
+
+    n = 10
+    plt.figure(figsize=(20, 4))
+    for i in range(n):
+    	ax = plt.subplot(2, n, i)
+    	plt.imshow(x_test[i].reshape(28, 28))
+    	plt.gray()
+    	ax.get_xaxis().set_visible(False)
+    	ax.get_yaxis().set_visible(False)
+
+    	ax = plt.subplot(2, n, i + n)
+    	plt.imshow(decoded_imgs[i].reshape(28, 28))
+    	plt.gray()
+    	ax.get_xaxis().set_visible(False)
+    	ax.get_yaxis().set_visible(False)
+
+    plt.savefig('plots/cifar.png')
 
     
