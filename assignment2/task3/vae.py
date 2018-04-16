@@ -57,7 +57,7 @@ vae_loss = K.mean(xent_loss + kl_loss)
 
 vae.add_loss(vae_loss)
 vae.compile(optimizer='rmsprop')
-vae.summary()
+#vae.summary()
 
 
 # train the VAE on MNIST digits
