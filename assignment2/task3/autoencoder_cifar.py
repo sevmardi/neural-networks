@@ -11,6 +11,11 @@ from keras.optimizers import Adam
 from keras.layers.pooling import MaxPooling2D
 from keras.utils import to_categorical
 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+
 # For reproducibility
 np.random.seed(1000)
 

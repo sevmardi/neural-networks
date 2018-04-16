@@ -44,7 +44,7 @@ x_test = np.reshape(x_test, (len(x_test), 28, 28, 1))  # adapt this if using `ch
 
 
 autoencoder.fit(x_train, x_train,
-                epochs=50,
+                epochs=1,
                 batch_size=128,
                 shuffle=True,
                 validation_data=(x_test, x_test),
