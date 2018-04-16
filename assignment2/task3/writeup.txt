@@ -3,7 +3,7 @@ The first run took about a minute running on tritanium with epochs set to 50 run
 
 Adding a sparsity constraint on the encoded representations
 ------------------------------------------------------------
-Afterwards I trained the model for 100 epochs with added regularization which reduces the likelihood for the model to overfit and can be trained longer. It took around ~4 mintues and took the same amount of RAM. The model ends with a  loss of 0.27 on both training and testing. The first-sight results were pretty bad for some unknow reason to me. I tweaked the params for serveral times, tried different settings, but unforutently could't get the right results as mentiond in the blog. 
+Afterwards I trained the model for 100 epochs with added regularization which reduces the likelihood for the model to overfit and can be trained longer. It took around ~4 mintues and took the same amount of RAM. The model ends with a  loss of 0.27 on both training and testing. The first-sight results were pretty bad for some unknown reason to me. I tweaked the params for serveral times, tried different settings, but unforutently could't get the right results as mentiond in the blog. 
 
 Deep autoencoder
 ----------------

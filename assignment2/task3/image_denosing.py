@@ -64,7 +64,7 @@ decoded_imgs = autoencoder.predict(x_test)
 n = 10
 plt.figure(figsize=(20, 4))
 for i in range(n):
-	display original
+	# display original
 	ax = plt.subplot(2, n, i)
 	plt.imshow(x_test[i].reshape(28, 28))
 	plt.gray()
