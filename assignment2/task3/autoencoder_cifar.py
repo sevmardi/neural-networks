@@ -53,7 +53,7 @@ if __name__ == '__main__':
     model.fit(X_train / 255.0, to_categorical(Y_train),
               batch_size=128,
               shuffle=True,
-              epochs=0,
+              epochs=100,
               validation_data=(X_test / 255.0, to_categorical(Y_test)),
               callbacks=[EarlyStopping(min_delta=0.001, patience=3)])
 
