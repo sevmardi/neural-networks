@@ -2,7 +2,7 @@ from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D
 from keras.models import Model
 from keras import backend as K
 import pickle as pic
-from keras.callbacks import TensorBoard
+from keras.callbacks import TensorBoard, CSVLogger 
 import os 
 
 
