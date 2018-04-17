@@ -1,34 +1,8 @@
-Autoencoders in Keras
---------------------
-The following lines quoted from Keras blog explaning in their own words what Autnencoder are: "Autoencoding is a data compression algorithm where the compression and decompression functions are 1) data-specific, 2) lossy, and 3) learned automatically from examples rather than engineered by a human. Additionally, in almost all contexts where the term "autoencoder" is used, the compression and decompression functions are implemented with neural networks." [1]
-The way we see is as the following: Neural networks exist in all shapes and sizes, and are often characterized by their input and output data type. For instance, image classifiers are built with Convolutional Neural Networks. They take images as inputs, and output a probability distribution of the classes.
-
-Autoencoders (AE) are a family of neural networks for which the input is the same as the output. They work by compressing the input into a latent-space representation, and then reconstructing the output from this representation.
-
-What are autoencoders good for?
--------------------------------
-Autoencoders are almost to rarely used on production level. Google used them for small applications in 2012, but that was very brief moments before they swithced or, to say the least, started developing their own neural networks.
-
-These days are mostely used for data denoising [link to the subject below] and other subjects such as dimensionality reduction for data visualization. We will be covering the former but not the latter. 
-
-One of the reasons of why autoencoders attracehd some much research attention is because they have long been thought to be a potential avenue for solving the problem of unsupervised learning, i.e. but as it turns out this is not entiraly true. They are a self-supervised technique, a specific instance of supervised learning where the targets are generated from the input data. But without further due lets talk briefly about a simple sort of autoencoders. 
-
-The code could be found under this blog [1]
-
-This basic autoencoder consists of a single fully-connected neural layer as encoder and as decoder, a separate encoder model as well as a decoder model. That's it. We can start training right a way on the MNIST digits. 
-
-
-The first run took about a minute running on tritanium with epochs set to 50 runs. The results are to be seen below. 
-
-[show image]
-
-
-Afterwards we played around with that number and run it again on 100 epochs the which took around five minutes on the same machine. One can't help but to notice how accurate the model is shaping the images. Finally I bumped that number towards 500 for more accurate results which took exactly 16 minutes [save machine] and used around 542MB of ram. I believe if one keeps running this for several hours would finally reach the same accurate results as in the original image. 
-
-
 Adding a sparsity constraint on the encoded representations
 ------------------------------------------------------------
-Afterwards I trained the model for 100 epochs with added regularization which reduces the likelihood for the model to over-fit and can be trained longer. It took around ~4 minutes and took the same amount of RAM. The model ends with a  loss of 0.27 on both training and testing. The first-sight results were pretty bad for some unknown reason to me. I tweaked the params for several times, tried different settings, but unfortunately couldn’t get the right results as mentioned in the blog. 
+Afterwards we trained the model for 100 epochs with added regularization which reduces the likelihood for the model to over-fit and can be trained longer. It took around ~4 minutes and took the same amount of RAM. The model ends with a  loss of 0.27 on both training and testing. The first-sight results were pretty bad for some unknown reason to me. I tweaked the params for several times, tried different settings, but unfortunately couldn’t get the right results as mentioned in the blog. 
+
+
 
 Deep autoencoder
 ----------------
